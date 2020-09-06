@@ -80,7 +80,7 @@
     - [万级K8s集群背后etcd稳定性及性能优化实践](https://www.cnblogs.com/tencent-cloud-native/p/13614986.html)
     - [三年之久的 etcd 3 数据不一致 bug 分析](http://dockone.io/article/10077)
 
-    解决办法有但是不可能实现——老老实实的设计测试方案和写测试案例。脏活累活还便宜竞争对手的活，谁干谁傻。
+    解决办法有但是在参与者是业务竞争对手的情况下比较难实现——老老实实的设计足够覆盖所有可能场景的测试方案和认真写测试案例。
 
     由于etcd更新非常的频繁，如果etcd使用的范围被放大，那这个问题只会越来越严重。
 
@@ -88,39 +88,11 @@
   
     etcd的MVCC一方面为同一个key提供多个版本的值，但同时不手动压缩的话，那么这些版本的key会一直存在。如果不注意使用，放在了一个写频繁的应用场景，那么在数据量大的时候容易出现性能问题。
     解决办法是重写事务处理的代码，实现最起码的的隔离（Read Committed)和合适的锁粒度。
+
+    这个问题来源于boltdb（目前叫做bblot，一个boltdb的fork，因为boltdb已经停止维护），要解决这个问题，就必须改写blotdb的实现。
   
   - 调试信息不足
   
     全靠谁踩坑谁补。和测试不足一样，脏活累活。
 
-- [etcd源码概览](etcd-source-reading-in-genral)
-
-    重点的源码目录加粗表示。client/clientv3如果不是想实现客户端的话可以不用看。
-
-    | 目录          | 说明                                            |
-    | ------------- | ----------------------------------------------- |
-    | __auth__          | 用户验证                                        |
-    | client        | V3之前的客户端                                  |
-    | clientv3      | V3版的客户端                                    |
-    | contrib       | 脚本例子，不属于etcd本身                        |
-    | Documentation | Etcd文档                                        |
-    | embed         | 在应用内启动etcd的支持                          |
-    | etcdctl       | 控制台                                          |
-    | __etcdmain__      | 主入口                                          |
-    | __etcdserver__    | Etcd服务端                                      |
-    | functional    | 各组件的功能测试                                |
-    | hack          | 各种hack                                        |
-    | integration   | 集成测试                                        |
-    | __lease__         | 租约服务                                        |
-    | logos         |
-    | __mvcc__          | Etcd的多版本存储实现，提供KV支持的核心功能      |
-    | pkg           | Etcd依赖包                                      |
-    | proxy         | Grpc/http/tcp代理                               |
-    | __raft__          | Raft协议实现                                    |
-    | scripts       | 编译脚本                                        |
-    | security      | 一堆关于如何处理安全问题的文档…完全没意义的东西 |
-    | tests         | 大量使用Docker部署etcd的测试                    |
-    | tools         | Etcd的一些工具，如dumpdb，dumplogs，dumpmetrics |
-    | vendor        | 模块依赖，etcd开始转向go的模块依赖              |
-    | version       | 版本号                                          |
-    | __wal__           | write ahead log，实现事务的核心                 |
+- [etcd源码概览](etcd_source.md)
