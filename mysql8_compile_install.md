@@ -2,9 +2,12 @@
 - [Prequires](Prequires)
   - __30 GB__ Free Disk Space
   - Packages
-     - build-essential bison cmake libssl-dev (ubuntu)
-     - Download boost and tar xf boost_x_xx.tar to a location (I put it at $HOME/boost)
-     - It will check and tell you what missed and the package name, so read the error carefully and you find the required package(s)
+    - build-essential bison cmake libssl-dev (ubuntu)
+    - Download boost and tar xf boost_x_xx.tar to a location (I put it at $HOME/boost)
+    - It will check and tell you what missed and the package name, so read the error carefully and you find the required package(s)
+  - Cloning the source tree
+    - git clone https://github.com/mysql/mysql-server.git
+    - This is a good way to avoid un-necessary errors, copying from WINDOWS could hit CRLF issue
 - [Compling and Install](compile_install)
   - cd to the source dir
   - mkdir build
