@@ -1,0 +1,23 @@
+# Compiling MySQL 8.0 from source
+- [Prequires](Prequires)
+  - __30 GB__ Free Disk Space
+  - Packages
+     - build-essential bison cmake libssl-dev (ubuntu)
+     - Download boost and tar xf boost_x_xx.tar to a location (I put it at $HOME/boost)
+     - It will check and tell you what missed and the package name, so read the error carefully and you find the required package(s)
+- [Compling and Install](compile_install)
+  - cd to the source dir
+  - mkdir build
+  - cd build
+  - cmake .. -DWITH_BOOST=$HOME/boost  -DCMAKE_BUILD_TYPE=debug(This one is optional)
+  - make install DESTDIR="/your/path"(optional, if not specified, it will be installed at /usr/local/mysql), might take 1 hour or more
+  - cd /usr/loca/mysql(or the DESTDIR you specified)
+  - sudo groupadd mysql
+  - mkdir mysql-files
+  - sudo chown mysql:mysql mysql-files
+  - sudo chmod 750 mysql-files
+  - ./bin/mysqld --initialize --user=mysql(It will generate a temp password for root and print at the screen)
+  - ./bin/mysqld_safe --user=mysql &
+  - ./bin/mysql -u root -p (Enter the password generated in above step)
+  - alter user user() identified by 'YOUR_NEW_PASSWORD' (if you dont' execute this, you can't use it at all)
+  - done
