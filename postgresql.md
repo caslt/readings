@@ -81,6 +81,77 @@ postgres.h
     - xxx_sort_yyy          Custom sort implementation
 - utils/elog.h              Everything you need when handling errors..
 - utils/palloc.h            Memory alocator
-  
+  - struct MemoryContextData *                MemoryContext
+  - void (*MemoryContextCallbackFunction)     (void *arg)
+  - struct MemoryContextCallback
+  - MemoryContext                             CurrentMemoryContext
+  - MCXT_ALLOC_HUGE                           0x01                    allow huge allocation (>1GB)
+  - MCXT_ALLOC_NO_OOM                         0x02                    no failure if out-of-memory
+  - MCXT_ALLOC_ZERO                           0x04                    zero allocated memory
+  - void *MemoryContextAlloc(MemoryContext context, Size size)
+  - ... allocator staff
+  - extern void *palloc(Size size)
+  - palloc_xxxx
+  - MemoryContextAllocHuge
+  - static inline MemoryContext MemoryContextSwitchTo(MemoryContext context)
+  - void MemoryContextRegisterResetCallback(MemoryContext context, MemoryContextCallback *cb)
 - variable-length datatypes
+  - struct varatt_external                              varatt_external         TOAST pointer
+  - VARLENA_EXTSIZE_MASK	                              ((1U << 30) - 1)        The va_extinfo in the varatt_external identified compresssion method
+  - struct varatt_indirect                              varatt_indirect         contains a varlena structure pointer
+  - struct ExpandedObjectHeader                         ExpandedObjectHeader
+  - struct varatt_expanded                              varatt_expanded         contains an ExpandedObjectHeader pointer
+  - enum  vartag_external                               vartag_external
+  - union varattrib_4b                                  varattrib_4b            a structure not used directly
+  - struct varattrib_1b                                 varattrib_1b            an unsigned char as header, and char array as data
+  - struct varattrib_1b_e                               varattrib_1b_e          an unsigned char as header, an unsigned char as tag, and char array as data
+  - Endian-dependent macros..
 - Datum type + support macros
+  - uintptr_t                                           Datum                   A value of pass-by-value type, or a pointer to a value of pass-by-reference type. sizeof(Datum)==sizeof(void *)== 4 or 8
+  - struct NullableDatum                                NullableDatum           Store its datum and nullness
+  - Datum macros...
+
+bootstrap/bootstrap.h
+- nodes/execnodes.h
+  - access/tupconvert.h
+    - access/attmap.h
+      - access/attnum.h
+        - int16                                         AttrNumber
+        - InvalidAttrNumber                             0
+        - MaxAttrNumber                                 32767
+        - AttributeNumber macros...
+      - access/tupdesc.h
+        - catalog/pg_attribute.h definition of the "attribute" system catalog (pg_attribute). Catalog.pm module reads this file and derives schema information
+          - catalog/genbki.h macros
+            - CATALOG(name,oid,oidmacro)                typedef struct CppConcat(FormData_,name)
+            - DECLARE_TOAST(name,toastoid,indexoid)     genbki.pl 
+            - DECLARE_INDEX(name,oid,oidmacro,decl)     genbki.pl 
+            - DECLARE_UNIQUE_INDEX(name,oid,oidmacro,decl) genbki.pl 
+            - DECLARE_UNIQUE_INDEX_PKEY(name,oid,oidmacro,decl) genbki.pl 
+            - DECLARE_FOREIGN_KEY(cols,reftbl,refcols)    genbki.pl
+            - DECLARE_FOREIGN_KEY_OPT(cols,reftbl,refcols)          genbki.pl
+            - DECLARE_ARRAY_FOREIGN_KEY(cols,reftbl,refcols)        genbki.pl
+            - DECLARE_ARRAY_FOREIGN_KEY_OPT(cols,reftbl,refcols)    genbki.pl
+          - catalog/pg_attribute_d.h
+        - nodes/pg_list.h
+    - access/htup.h
+    - access/tupdesc.h
+    - executor/tuptable.h
+    - nodes/bitmapset.h
+  - executor/instrument.h
+  - fmgr.h
+  - lib/ilist.h
+  - lib/pairingheap.h
+  - nodes/params.h
+  - nodes/plannodes.h
+  - nodes/tidbitmap.h
+  - partitioning/partdefs.h
+  - storage/condition_variable.h
+  - utils/hsearch.h
+  - utils/queryenvironment.h
+  - utils/reltrigger.h
+  - utils/sharedtuplestore.h
+  - utils/snapshot.h
+  - utils/sortsupport.h
+  - utils/tuplesort.h
+  - utils/tuplestore.h
