@@ -1,0 +1,86 @@
+Source Reading
+postgres.h
+- c.h
+  - postgres_ext.h
+    - unsigned int            Oid
+    - OID_MAX                 UINT_MAX
+    - InvalidOid              (Oid(0)) or ((Oid)0)
+    - PG_INT64_TYPE           pg_int64          which is long int
+    - PG_DIAG_XXX
+  - pg_config.h
+  - pg_config_manual.h (#defines)
+    - DEFAULT_XLOG_SET_SIZE   16 * 1024 * 1024  WAL-segsize
+    - NAMEDATALEN             64                Maximum length for identifiers
+    - FUNC_MAX_ARGS           100               Maximum number of arguments of a function
+    - FMGR_ABI_EXTRA          Postgresql        Product drived from pg should change this if it causes incompatibilities
+    - INDEX_MAX_KEYS          32                Maximum number of columns in an index
+    - PARTITION_MAX_KEYS      32                Maximum number of columns in a partition key
+    - PG_SOMAXCONN            10000             Maximum Accept-Queue length limit
+    - ALIGNOF_BUFFER          32                Alignment for DISK I/O buffers
+    - DEFAULT_PGSOCKET_DIR    /tmp              Linux value. Windows not using AF_UNIX, which sets to empty
+    - DEFAULT_EVENT_SOURCE    Postgresql        Windows Event source
+    - PG_CACHE_LINE_SIZE      128               Used to pad some data structures in xlog.c
+  - DATA type defines
+    - PG_INT8_MIN ...
+    - uintx ...
+    - unsigned int            Index
+    - signed int              Offset
+    - float                   float4
+    - double                  float8
+    - Oid                     regproc           regproc used in the include/catalog headers
+    - regproc                 RegProcedure      Same as above, but preferred in C code
+    - uint32                  TransactionId     I guess this would be a problem for REAL world db
+    - uint32                  MultiXactOffset   Must be the same as TransactionId
+    - uint32                  CommandId         ... again...
+    - FirstCommandId          0
+    - struct varlena          Variable-length datatypes share this header
+    - struct varlena          bytea
+    - struct varlena          text
+    - struct varlena          BpChar            Blank-padded char, i.e. char(n)
+    - struct varlena          VarChar           var-length char, i.e. varchar(n)
+    - struct int2vector       int16 array
+    - struct oidvector        Oid array
+    - struct {char[NAMEDATALEN]} NameData
+    - NameData*               Name
+    - NameStr(name)           ((name).data)
+    - BoolIsValid(x)
+    - PointerIsValid(x)
+    - PointerIsAligned
+    - OffsetToPointer
+    - OidIsValid(x)
+    - RegProcedureIsValid(x)
+    - lengthof(array)
+    - XXXXALIGN...          A lot of alignment macros
+    - AssertXXX             For debug
+    - Max/Min/Abs/MemSet/MemSetAligned/MemSetLoop   Common macros
+    - union PGAlignedXLogBlock    A field/local variable holding a page buffer
+    - union PGAlignedXLogBlock    Same, but for XLOG_BLCKSZ-sized buffer
+    - HIGHBIT               (0x80)
+    - ESCAPE_STRING_SYNTAX  'E'
+    - STATUS_OK             (0)
+    - STATUS_ERROR          (-1)
+    - STATUS_EOF            (-2)
+    - gettext(x)            (x)
+    - _(x)                  gettext(x)
+    - PG_TEXTDOMAIN(x)      (x "-" PG_MAJORVERSION)
+    - PG_BINARY             0
+    - PG_BINARY_A           a
+    - PG_BINARY_R           r
+    - PG_BINARY_W           w
+    - PGDLLIMPORT
+    - PGDLLEXPORT
+    - SIGNAL_ARGS           int postgres_signal_arg
+    - NON_EXEC_STATIC       static             It is empty in Windows OS
+  - port.h
+    - int/Socket            pg_socket           Linux/Windows
+    - PGINVALID_SOCKET      INVALID_SOCKET      ((Socket)~0)
+    - xxxx_path(const char *path)               path handling staff ...
+    - xxxx_exec
+    - xxxxprintf            Custom printf implementation
+    - other file staffs, like openning/reading a handle
+    - xxx_sort_yyy          Custom sort implementation
+- utils/elog.h              Everything you need when handling errors..
+- utils/palloc.h            Memory alocator
+  
+- variable-length datatypes
+- Datum type + support macros
