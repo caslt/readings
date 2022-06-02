@@ -114,13 +114,13 @@ postgres.h
 bootstrap/bootstrap.h
 - nodes/execnodes.h
   - access/tupconvert.h
-    - access/attmap.h
+    - access/attmap.h   attribute mappings
       - access/attnum.h
         - int16                                         AttrNumber
         - InvalidAttrNumber                             0
         - MaxAttrNumber                                 32767
         - AttributeNumber macros...
-      - access/tupdesc.h
+      - access/tupdesc.h tuple descriptor definitions.
         - catalog/pg_attribute.h definition of the "attribute" system catalog (pg_attribute). Catalog.pm module reads this file and derives schema information
           - catalog/genbki.h macros
             - CATALOG(name,oid,oidmacro)                typedef struct CppConcat(FormData_,name)
@@ -136,8 +136,57 @@ bootstrap/bootstrap.h
         - nodes/pg_list.h                              interface for PostgreSQL generic list package
           - nodes/nodes.h                              Definitions for tagged nodes.
             - enum NodeTag                             Each created node(by makeNode) will have NodeTag as 1st field
-    - access/htup.h
-    - access/tupdesc.h
+            - struct Node                              Any node can be casted to Node
+            - newNode(size, tag)                       newNode macro
+            - makeNode(_type_)		                    ((_type_ *) newNode(sizeof(_type_),T_##_type_))
+            - NodeSetTag(nodeptr,t)	                  (((Node*)(nodeptr))->type = (t))
+            - IsA(nodeptr,_type_)		                  (nodeTag(nodeptr) == T_##_type_)
+            - outXXX                                  Node/Token/BitmapSet/Datum
+            - readXXX                                 Datum/BoolCols/IntCols/OidCols/AttrNumberCols
+            - equal
+            - double                                  Selectivity
+            - double                                  Cost
+            - double                                  Cardinality
+            - enum CmdType                            Operation represented by a Query or PlannedStmt
+            - enum JoinType                           types of relation joins
+            - enum AggStrategy                        overall execution strategies for Agg plan nodes
+            - AGGSPLITOP_XXXX                         splitting (partial aggregation) modes for Agg plan nodes
+            - enum AggSplit                           Supported operating modes
+            - enum SetOpCmd
+            - enum SetOpStrategy
+            - enum OnConflictAction
+            - enum LimitOption
+          - union ListCell
+          - struct List
+          - NIL						((List *) NULL)
+        - struct AttrDefault
+        - struct ConstrCheck
+        - struct TupleConstr
+        - struct TupleDescData *TupleDesc
+      - struct AttrMap
+      - AttrMap *make_attrmap(int maplen)
+      - void free_attrmap(AttrMap *map)
+    - access/htup.h     heap tuple definitions.
+      - storage/itemptr.h   disk item pointer definitions
+        - storage/block.h   disk block definitions
+          - uint32 BlockNumber                          
+          - InvalidBlockNumber		                      ((BlockNumber) 0xFFFFFFFF)
+          - MaxBlockNumber                              ((BlockNumber) 0xFFFFFFFE)
+          - struct BlockIdData                          BlockIdData                 BlockId
+          - macro staff...
+        - storage/off.h   disk "offset" definitions
+          - storage/itemid.h                            buffer page item identifier/line pointer definition
+            - struct ItemIdData                         A line pointer on a buffer page
+            - uint16 ItemOffset
+            - uint16 ItemLength
+            - LP_XXXX                                   LP_UNUSED/LP_NORMAL/LP_REDIRECT/LP_DEAD   (0/1/2/3) Line pointer states
+            - ItemIdXXX                                 macros..
+          - uint16 OffsetNumber                         A 1-based index into the linp (ItemIdData) array in the header of each disk page
+          - InvalidOffsetNumber		                      ((OffsetNumber) 0)
+          - FirstOffsetNumber		                        ((OffsetNumber) 1)
+          - MaxOffsetNumber			                        ((OffsetNumber) (BLCKSZ / sizeof(ItemIdData)))
+      - struct HeapTupleData                            An in-memory data structure that points to a tuple
+    - access/tupdesc.h included
     - executor/tuptable.h
     - nodes/bitmapset.h
   - executor/instrument.h
