@@ -132,8 +132,10 @@ bootstrap/bootstrap.h
             - DECLARE_FOREIGN_KEY_OPT(cols,reftbl,refcols)          genbki.pl
             - DECLARE_ARRAY_FOREIGN_KEY(cols,reftbl,refcols)        genbki.pl
             - DECLARE_ARRAY_FOREIGN_KEY_OPT(cols,reftbl,refcols)    genbki.pl
-          - catalog/pg_attribute_d.h
-        - nodes/pg_list.h
+          - catalog/pg_attribute_d.h                   dynamic generated
+        - nodes/pg_list.h                              interface for PostgreSQL generic list package
+          - nodes/nodes.h                              Definitions for tagged nodes.
+            - enum NodeTag
     - access/htup.h
     - access/tupdesc.h
     - executor/tuptable.h
