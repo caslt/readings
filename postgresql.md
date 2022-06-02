@@ -135,7 +135,7 @@ bootstrap/bootstrap.h
           - catalog/pg_attribute_d.h                   dynamic generated
         - nodes/pg_list.h                              interface for PostgreSQL generic list package
           - nodes/nodes.h                              Definitions for tagged nodes.
-            - enum NodeTag
+            - enum NodeTag                             Each created node(by makeNode) will have NodeTag as 1st field
     - access/htup.h
     - access/tupdesc.h
     - executor/tuptable.h
